@@ -15,14 +15,8 @@ import java.util.regex.Matcher;
 @Service
 public class MainServiceImpl implements MainService
 {
-    //todo use same object for all items
     //todo improve regex to parse links better, maybe use jsoup instead
-    //todo put restTemplate code in separate service
-    //todo name things better
-    //todo implement GUI w/ Thymeleaf and maybe Vue.js
     //todo https://stackoverflow.com/questions/54930449/how-do-i-solve-reached-the-maximum-number-of-uri-tags-for-http-client-requests
-    //todo caching
-    //todo load cache on startup
     @Autowired
     private HackerNewsService hackerNewsService;
 
