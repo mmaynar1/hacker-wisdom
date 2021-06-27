@@ -3,9 +3,9 @@ package com.mmaynard.controller;
 import com.mmaynard.service.MainService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
 
 @Controller
 public class MainController
@@ -19,9 +19,10 @@ public class MainController
     }
 
     @RequestMapping(value = "test", method = RequestMethod.GET)
-    @ResponseBody
-    public String test()
+    public String test( Model model )
     {
-        return mainService.test();
+        String html = mainService.test();
+        model.addAttribute("test", html );
+        return "index";
     }
 }
