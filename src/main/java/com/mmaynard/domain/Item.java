@@ -2,9 +2,10 @@ package com.mmaynard.domain;
 
 import java.util.List;
 
-public class Comment
+public class Item
 {
     private String id;
+    private String title;
     private String text;
     private List<Integer> kids;
 
@@ -16,6 +17,16 @@ public class Comment
     public void setId(String id)
     {
         this.id = id;
+    }
+
+    public String getTitle()
+    {
+        return title;
+    }
+
+    public void setTitle(String title)
+    {
+        this.title = title;
     }
 
     public String getText()

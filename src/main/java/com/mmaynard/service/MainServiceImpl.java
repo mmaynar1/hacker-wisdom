@@ -1,16 +1,14 @@
 package com.mmaynard.service;
 
 import com.mmaynard.domain.AnsweredQuestion;
-import com.mmaynard.domain.Comment;
-import com.mmaynard.domain.Post;
+import com.mmaynard.domain.Item;
+import com.mmaynard.util.RegexPatterns;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.RestTemplate;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 @Service
 public class MainServiceImpl implements MainService
@@ -22,27 +20,30 @@ public class MainServiceImpl implements MainService
     //todo implement GUI w/ Thymeleaf and maybe Vue.js
     //todo https://stackoverflow.com/questions/54930449/how-do-i-solve-reached-the-maximum-number-of-uri-tags-for-http-client-requests
     //todo caching
-
-
-    private static final String API_URL = "https://hacker-news.firebaseio.com/v0/";
-
+    //todo load cache on startup
     @Autowired
-    private RestTemplate restTemplate;
+    private HackerNewsService hackerNewsService;
 
     @Override
     public String test()
     {
-        List<Integer> questions = restTemplate.getForObject(API_URL +"askstories.json?print=pretty", List.class);
+        List<Integer> questions = hackerNewsService.getAskHNPosts();
 
-        List<Post> posts = new ArrayList<>();
+        List<Item> posts = new ArrayList<>();
         for( Integer question : questions )
         {
-            Post post = restTemplate.getForObject(API_URL + "item/"+ question +".json?print=pretty", Post.class);
+            Item post = hackerNewsService.getItem( question );
             posts.add(post);
         }
 
+        List<AnsweredQuestion> answeredQuestions = getAnsweredQuestions(posts);
+        return buildHtml(answeredQuestions);
+    }
+
+    private List<AnsweredQuestion> getAnsweredQuestions(List<Item> posts)
+    {
         List<AnsweredQuestion> answeredQuestions = new ArrayList<>();
-        for( Post post : posts )
+        for( Item post : posts )
         {
             AnsweredQuestion answeredQuestion = new AnsweredQuestion();
             answeredQuestion.setId(post.getId());
@@ -53,22 +54,33 @@ public class MainServiceImpl implements MainService
             {
                 for (Integer kid : post.getKids())
                 {
-                    Comment comment = restTemplate.getForObject(API_URL + "item/" + kid + ".json?print=pretty", Comment.class);
+                    Item comment = hackerNewsService.getItem( kid );
                     List<String> links = findLinks( comment.getText() );
                     answeredQuestion.getLinks().addAll(links);
                 }
+
+                if( answeredQuestion.getLinks().size() > 0 )
+                {
+                    answeredQuestions.add(answeredQuestion);
+                }
             }
-
-            answeredQuestions.add(answeredQuestion);
         }
+        return answeredQuestions;
+    }
 
-
+    private String buildHtml(List<AnsweredQuestion> answeredQuestions)
+    {
         String html = "";
         for( AnsweredQuestion a : answeredQuestions )
         {
             if( a.getLinks().size() > 0 )
             {
-                html += a.getTitle() + "<br>" + a.getLinks() + "<br><br>";
+                html += a.getTitle() + "<br>";
+                for( String link : a.getLinks())
+                {
+                    html +=  "<a href=\"" + link + "\">" + link + "</a><br>";
+                }
+                html += "<br><br>";
             }
         }
         return html;
@@ -82,14 +94,10 @@ public class MainServiceImpl implements MainService
         }
 
         List<String> links = new ArrayList<>();
-        Pattern pattern = Pattern.compile("(<a href.+</a>)");
-        Matcher matcher = pattern.matcher(text);
+        Matcher matcher = RegexPatterns.A_HREF.matcher(text);
         if( matcher.find() )
         {
-            for (int i = 0; i < matcher.groupCount(); i++)
-            {
-                links.add(matcher.group(i));
-            }
+            links.add(matcher.group(2));
         }
         return links;
     }
