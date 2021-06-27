@@ -1,6 +1,9 @@
 package com.mmaynard.service;
 
+import com.mmaynard.domain.AnsweredQuestion;
+import java.util.List;
+
 public interface MainService
 {
-    String test();
+    List<AnsweredQuestion> getAnsweredQuestions();
 }

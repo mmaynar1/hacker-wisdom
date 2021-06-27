@@ -25,19 +25,22 @@ public class MainServiceImpl implements MainService
     private HackerNewsService hackerNewsService;
 
     @Override
-    public String test()
+    public List<AnsweredQuestion> getAnsweredQuestions()
     {
         List<Integer> questions = hackerNewsService.getAskHNPosts();
+        List<Item> posts = getItems(questions);
+        return getAnsweredQuestions(posts);
+    }
 
+    private List<Item> getItems(List<Integer> ids)
+    {
         List<Item> posts = new ArrayList<>();
-        for( Integer question : questions )
+        for( Integer id : ids )
         {
-            Item post = hackerNewsService.getItem( question );
+            Item post = hackerNewsService.getItem( id );
             posts.add(post);
         }
-
-        List<AnsweredQuestion> answeredQuestions = getAnsweredQuestions(posts);
-        return buildHtml(answeredQuestions);
+        return posts;
     }
 
     private List<AnsweredQuestion> getAnsweredQuestions(List<Item> posts)
@@ -68,24 +71,6 @@ public class MainServiceImpl implements MainService
         return answeredQuestions;
     }
 
-    private String buildHtml(List<AnsweredQuestion> answeredQuestions)
-    {
-        String html = "";
-        for( AnsweredQuestion a : answeredQuestions )
-        {
-            if( a.getLinks().size() > 0 )
-            {
-                html += a.getTitle() + "<br>";
-                for( String link : a.getLinks())
-                {
-                    html +=  "<a href=\"" + link + "\">" + link + "</a><br>";
-                }
-                html += "<br><br>";
-            }
-        }
-        return html;
-    }
-
     private List<String> findLinks(String text)
     {
         if( text == null )
@@ -97,7 +82,9 @@ public class MainServiceImpl implements MainService
         Matcher matcher = RegexPatterns.A_HREF.matcher(text);
         if( matcher.find() )
         {
-            links.add(matcher.group(2));
+            String link = matcher.group(2);
+            link = link.replace("&#x2F;", "/");
+            links.add(link);
         }
         return links;
     }
