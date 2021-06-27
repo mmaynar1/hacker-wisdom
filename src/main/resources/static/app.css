@@ -21,6 +21,8 @@ h1 {
 .linkContainer {
     margin-bottom: 5px;
     font-size: 11pt;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 a {
