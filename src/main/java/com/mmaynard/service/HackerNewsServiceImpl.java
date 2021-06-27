@@ -5,7 +5,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class HackerNewsServiceImpl implements HackerNewsService
@@ -24,6 +26,8 @@ public class HackerNewsServiceImpl implements HackerNewsService
     @Override
     public Item getItem(Integer id)
     {
-        return restTemplate.getForObject(API_URL + "item/"+ id +".json?print=pretty", Item.class);
+        Map<String,Object> uriVariables = new HashMap<>();
+        uriVariables.put("id", id);
+        return restTemplate.getForObject(API_URL + "item/{id}.json?print=pretty", Item.class, uriVariables);
     }
 }

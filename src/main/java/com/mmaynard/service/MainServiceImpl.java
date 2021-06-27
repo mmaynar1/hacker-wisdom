@@ -16,7 +16,6 @@ import java.util.regex.Matcher;
 public class MainServiceImpl implements MainService
 {
     //todo improve regex to parse links better, maybe use jsoup instead
-    //todo https://stackoverflow.com/questions/54930449/how-do-i-solve-reached-the-maximum-number-of-uri-tags-for-http-client-requests
     @Autowired
     private HackerNewsService hackerNewsService;
 
