@@ -4,6 +4,7 @@ import com.mmaynard.domain.AnsweredQuestion;
 import com.mmaynard.domain.Item;
 import com.mmaynard.util.RegexPatterns;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
@@ -27,7 +28,19 @@ public class MainServiceImpl implements MainService
 
     @Override
     @Cacheable("answeredQuestions")
-    public List<AnsweredQuestion> getAnsweredQuestions()
+    public List<AnsweredQuestion> getAnsweredQuestionsCacheable()
+    {
+        return getAnsweredQuestions();
+    }
+
+    @Override
+    @CachePut("answeredQuestions")
+    public List<AnsweredQuestion> getAnsweredQuestionsCachePut()
+    {
+        return getAnsweredQuestions();
+    }
+
+    private List<AnsweredQuestion> getAnsweredQuestions()
     {
         List<Integer> questions = hackerNewsService.getAskHNPosts();
         List<Item> posts = getItems(questions);

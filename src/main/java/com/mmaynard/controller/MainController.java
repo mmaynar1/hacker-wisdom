@@ -24,7 +24,7 @@ public class MainController
     @RequestMapping(value = "test", method = RequestMethod.GET)
     public String test( Model model )
     {
-        List<AnsweredQuestion> answeredQuestions = mainService.getAnsweredQuestions();
+        List<AnsweredQuestion> answeredQuestions = mainService.getAnsweredQuestionsCacheable();
         model.addAttribute("answeredQuestions", answeredQuestions );
         return "index";
     }
