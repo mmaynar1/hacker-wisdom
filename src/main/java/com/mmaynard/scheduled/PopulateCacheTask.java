@@ -19,7 +19,7 @@ public class PopulateCacheTask
     @Autowired
     private MainService mainService;
 
-    @Scheduled( fixedDelay = 120000 ) //Populate the cache every 2 minutes
+    @Scheduled( fixedDelay = 600000 ) //Populate the cache every 10 minutes
     public void populateCache()
     {
         try
