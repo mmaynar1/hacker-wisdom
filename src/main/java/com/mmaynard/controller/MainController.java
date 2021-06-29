@@ -21,11 +21,17 @@ public class MainController
         this.mainService = mainService;
     }
 
-    @RequestMapping(value = "test", method = RequestMethod.GET)
-    public String test( Model model )
+    @RequestMapping(method = RequestMethod.GET)
+    public String index( Model model )
     {
         List<AnsweredQuestion> answeredQuestions = mainService.getAnsweredQuestionsCacheable();
         model.addAttribute("answeredQuestions", answeredQuestions );
         return "index";
+    }
+
+    @RequestMapping(value = "about", method = RequestMethod.GET)
+    public String about( Model model )
+    {
+        return "about";
     }
 }

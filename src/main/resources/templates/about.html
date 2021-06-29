@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <link rel="stylesheet" th:href="@{/app.css}" />
+    <!--Make it look good on phones-->
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+<body>
+<main>
+    <div class="nav">
+        <div class="title"><strong>About</strong></div>
+        <div><a th:href="@{/}">Home</a> | Source Code | Blog Post</div>
+    </div>
+    <div class="container">
+        <p>Keeping up with tech news is great fun, but improving yourself and applying practical wisdom is even better.</p>
+        <p>
+            Some of the most valuable information on Hacker News can be found in the comment section. I often find myself
+            reading through interesting responses to interesting <a th:href="@{https://news.ycombinator.com/ask}">"Ask HN" questions</a> and saving off linked content for reading
+            in the future.
+        </p>
+        <p>It seemed in the spirit of Hacker News to automate part of this process and make it into a little web
+            application.
+        </p>
+        <p>
+            If you're interested in reading more about this project or seeing some of my other ones, consider subscribing to <a th:href="@{https://mitchum.blog/}">my blog</a>.
+            A few of my JavaScript <a th:href="@{https://mitchum.blog/game-tutorials/}">game tutorials</a> became popular on Hacker News, so you might find those interesting as well.
+        </p>
+    </div>
+</main>
+</body>
+</html>

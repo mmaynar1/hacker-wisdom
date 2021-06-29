@@ -7,7 +7,10 @@
 </head>
 <body>
     <main>
-        <h1>Hacker Wisdom</h1>
+        <div class="nav">
+            <div class="title"><strong>Hacker Wisdom</strong></div>
+            <div><a th:href="@{/about}">About</a> | Source Code | Blog Post</div>
+        </div>
         <div class="container">
             <div th:each="answer : ${answeredQuestions}">
                 <a th:href="${'https://news.ycombinator.com/item?id=' + answer.id}">
