@@ -15,7 +15,6 @@ import java.util.regex.Matcher;
 @Service
 public class MainServiceImpl implements MainService
 {
-    //todo improve regex to parse links better, maybe use jsoup instead
     @Autowired
     private HackerNewsService hackerNewsService;
 
@@ -66,11 +65,11 @@ public class MainServiceImpl implements MainService
                 for (Integer kid : post.getKids())
                 {
                     Item comment = hackerNewsService.getItem( kid );
-                    List<String> links = findLinks( comment.getText() );
+                    List<String> links = findLinks( comment );
                     answeredQuestion.getLinks().addAll(links);
                 }
 
-                if( answeredQuestion.getLinks().size() > 0 )
+                if( answeredQuestion.getLinks() != null && answeredQuestion.getLinks().size() > 0 )
                 {
                     answeredQuestions.add(answeredQuestion);
                 }
@@ -79,15 +78,15 @@ public class MainServiceImpl implements MainService
         return answeredQuestions;
     }
 
-    private List<String> findLinks(String text)
+    private List<String> findLinks(Item item)
     {
-        if( text == null )
+        if( item == null || item.getText() == null )
         {
             return new ArrayList<>();
         }
 
         List<String> links = new ArrayList<>();
-        Matcher matcher = RegexPatterns.A_HREF.matcher(text);
+        Matcher matcher = RegexPatterns.A_HREF.matcher(item.getText());
         if( matcher.find() )
         {
             String link = matcher.group(2);
