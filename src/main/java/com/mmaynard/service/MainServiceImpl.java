@@ -9,6 +9,7 @@ import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.regex.Matcher;
 
@@ -75,7 +76,18 @@ public class MainServiceImpl implements MainService
                 }
             }
         }
+
+        sortLinks(answeredQuestions);
+
         return answeredQuestions;
+    }
+
+    private void sortLinks(List<AnsweredQuestion> answeredQuestions)
+    {
+        for( AnsweredQuestion answeredQuestion : answeredQuestions )
+        {
+            Collections.sort(answeredQuestion.getLinks());
+        }
     }
 
     private List<String> findLinks(Item item)
