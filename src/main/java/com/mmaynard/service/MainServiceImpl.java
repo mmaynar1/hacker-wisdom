@@ -63,12 +63,9 @@ public class MainServiceImpl implements MainService
 
             if( post.getKids() != null )
             {
-                for (Integer kid : post.getKids())
-                {
-                    Item comment = hackerNewsService.getItem( kid );
-                    List<String> links = findLinks( comment );
-                    answeredQuestion.getLinks().addAll(links);
-                }
+                List<String> links = new ArrayList<>();
+                findAllLinks(post, links);
+                answeredQuestion.getLinks().addAll(links);
 
                 if( answeredQuestion.getLinks() != null && answeredQuestion.getLinks().size() > 0 )
                 {
@@ -80,6 +77,19 @@ public class MainServiceImpl implements MainService
         sortLinks(answeredQuestions);
 
         return answeredQuestions;
+    }
+
+    private void findAllLinks(Item post, List<String> links )
+    {
+        if( post != null && post.getKids() != null )
+        {
+            for (Integer kid : post.getKids())
+            {
+                Item comment = hackerNewsService.getItem(kid);
+                links.addAll(findLinks(comment));
+                findAllLinks(comment, links);
+            }
+        }
     }
 
     private void sortLinks(List<AnsweredQuestion> answeredQuestions)
