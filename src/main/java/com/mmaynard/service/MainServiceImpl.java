@@ -14,6 +14,8 @@ import java.util.regex.Matcher;
 @Service
 public class MainServiceImpl implements MainService
 {
+    private static final String CACHE_KEY = "answeredQuestions";
+
     @Autowired
     private HackerNewsService hackerNewsService;
 
@@ -23,14 +25,14 @@ public class MainServiceImpl implements MainService
     }
 
     @Override
-    @Cacheable("answeredQuestions")
+    @Cacheable(CACHE_KEY)
     public List<AnsweredQuestion> getAnsweredQuestionsCacheable()
     {
         return getAnsweredQuestions();
     }
 
     @Override
-    @CachePut("answeredQuestions")
+    @CachePut(CACHE_KEY)
     public List<AnsweredQuestion> getAnsweredQuestionsCachePut()
     {
         return getAnsweredQuestions();
@@ -107,7 +109,7 @@ public class MainServiceImpl implements MainService
     private Comparator <String> linksComparator = (link1, link2) -> {
         String result1 = getComparisonLink(link1);
         String result2 = getComparisonLink(link2);
-        return result1.compareTo(result2);
+        return result1.compareToIgnoreCase(result2);
     };
 
     private String getComparisonLink(String link)
