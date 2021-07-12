@@ -2,6 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <link rel="stylesheet" th:href="@{/app.css}" />
+    <script data-ad-client="ca-pub-3731131580005478" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
     <!--Make it look good on phones-->
     <meta name="viewport" content="width=device-width, initial-scale=1">
 </head>
@@ -19,6 +20,7 @@
                 <div class="linkContainer" th:each="link : ${answer.links}">
                     <a th:href="${link}" th:utext="${link}"></a>
                 </div>
+
             </div>
         </div>
     </main>
